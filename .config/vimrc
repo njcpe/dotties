@@ -1,0 +1,260 @@
+set nocompatible              " required
+
+"since st is a 256 color term, I can use all the pretty colors
+set termguicolors 
+
+" leader as ; cause I can't type properly anyways
+let mapleader=";"
+
+" Ignoring case is a fun trick
+set ignorecase
+
+" And so is Artificial Intelligence!
+set smartcase
+
+set clipboard=unnamedplus
+" This is totally awesome - remap jj to escape in insert mode.  You'll never type jj anyway, so it's great!
+inoremap jj <Esc>
+
+" === Folding ===
+set foldmethod=syntax
+set foldlevelstart=1
+
+" Space will toggle folds!
+nnoremap <space> za
+
+" Search mappings: These will make it so that going to the next one in a
+" search will center on the line it's found in.
+map N Nzz
+map n nzz
+
+" Keep all backups in one place
+if empty(glob("~/.vim/backup"))
+  silent !mkdir ~/.vim/backup
+  echom "making backup dir"
+endif
+
+
+if empty(glob("~/.vim/tmp"))
+  silent !mkdir ~/.vim/tmp
+  echom "making tmp dir"
+endif
+
+set backup
+set backupdir=~/.vim/backup
+set directory=~/.vim/tmp
+
+" When I close a tab, remove the buffer
+set nohidden
+
+"2 tabs for readability in small terminals
+set tabstop=2
+set shiftwidth=0
+set expandtab
+
+"=== Plugin Management ===
+" install Vim-Plug if missing
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC | q
+endif
+
+"autocmd VimEnter * PlugUpdate --sync | source $MYVIMRC | q
+
+call plug#begin('~/.vim/plugged')
+
+" === Source Control ===
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
+Plug 'mhinz/vim-signify'
+
+" === IDE-Like Enhancements ===
+Plug 'jiangmiao/auto-pairs'
+Plug 'mhinz/vim-startify'
+Plug 'Lokaltog/vim-easymotion'
+Plug 'scrooloose/nerdtree'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+Plug 'junegunn/vim-easy-align'
+Plug 'matze/vim-ini-fold'
+Plug 'edkolev/promptline.vim'
+Plug 'chrisbra/unicode.vim'
+" === Language Support ===
+Plug 'sheerun/vim-polyglot'
+Plug 'lervag/vimtex'
+Plug 'xuhdev/vim-latex-live-preview'
+Plug 'vimwiki/vimwiki'
+Plug 'chrisbra/csv.vim'
+
+" === Color Schemes ===
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'iCyMind/NeoSolarized'
+Plug 'rakr/vim-one'
+Plug 'ryanoasis/vim-devicons'
+call plug#end()            " required
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+let g:startify_custom_header = 'startify#center(startify#fortune#cowsay())'
+
+let g:vimtex_fold_enabled = 1
+
+let colorMode = $LIGHT_MODE
+
+if colorMode == 1
+  colorscheme one
+  set background=light
+  let g:airline_theme= 'one'
+else
+  colorscheme one
+  set background=dark
+  let g:airline_theme= 'onedark'
+endif
+function! s:find_git_root()
+  return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
+endfunction
+command! ProjectFiles execute 'Files' s:find_git_root() 
+
+"enable if you want your retinas scorched
+" default value is "normal", Setting this option to "high" or "low" does use the 
+" same Solarized palette but simply shifts some values up or down in order to 
+" expand or compress the tonal range displayed.
+let g:neosolarized_contrast = "low"
+
+" Special characters such as trailing whitespace, tabs, newlines, when displayed 
+" using ":set list" can be set to one of three levels depending on your needs. 
+" Default value is "normal". Provide "high" and "low" options.
+let g:neosolarized_visibility = "normal"
+
+" I make vertSplitBar a transparent background color. If you like the origin solarized vertSplitBar
+" style more, set this value to 0.
+let g:neosolarized_vertSplitBgTrans = 1
+
+" If you wish to enable/disable NeoSolarized from displaying bold, underlined or italicized 
+" typefaces, simply assign 1 or 0 to the appropriate variable. Default values:  
+let g:neosolarized_bold = 1
+let g:neosolarized_underline = 1
+let g:neosolarized_italic = 1
+
+
+set splitbelow
+set splitright
+
+" Easy Buffer Manipulation
+noremap <Leader>n :bn<cr>
+noremap <Leader>p :bp<cr>
+noremap <Leader>d :bd<cr>
+
+" Easy Pane Navagation
+nnoremap <Leader>j <C-W><C-J>
+nnoremap <Leader>k <C-W><C-K>
+nnoremap <Leader>l <C-W><C-L>
+nnoremap <Leader>h <C-W><C-H>
+
+"Python
+set pyxversion=3
+
+" Vimtex
+let g:vimtex_compiler_progname = 'nvr'
+
+" Latex Preview
+let g:livepreview_previewer = 'zathura'
+let g:livepreview_engine = 'xelatex'
+
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#autoshow = 1
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#left_sep = ''
+"let g:airline_theme= 'onedark'
+
+map <C-n> :NERDTreeToggle<CR>
+"set omnifunc=syntaxcomplete#Complete
+
+"Mousetrap
+set mouse=
+
+set completeopt=longest,menuone
+"Syntax Highlighting
+function! SyntaxHL()
+  hi LineNr       cterm=NONE  ctermbg=15    ctermfg=8     guibg=NONE 
+  hi CursorLineNr cterm=NONE  ctermbg=15    ctermfg=8     guibg=NONE    guifg=#859900   gui=bold
+  hi CursorLine   cterm=NONE  ctermbg=NONE  ctermfg=NONE  guibg=NONE    guifg=NONE      gui=NONE
+"  hi Normal       cterm=NONE  ctermbg=NONE                guibg=NONE                    gui=NONE
+endfunction
+
+call SyntaxHL()
+
+"Smart line numbering
+set number relativenumber
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
+
+set scrolloff=5
+
+"Goyo + Limelight
+function! s:goyo_enter()
+  call SyntaxHL()
+  set scrolloff=999
+  set noshowmode
+  set noshowcmd
+  Limelight
+endfunction
+
+function! s:goyo_leave()
+  call SyntaxHL()
+  set scrolloff=5
+  set showmode
+  set showcmd
+  Limelight!
+endfunction
+
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
+let g:goyo_linenr=1
+let g:goyo_width=100
+let g:limelight_conceal_ctermfg=12 
+let g:limelight_conceal_guifg='#839496'
+set cursorline
+let g:limelight_default_coefficient = 0.7
+"vimwiki
+let g:vimwiki_list = [
+      \{'path':'~/vimwiki/general','syntax':'markdown','ext':'.md'},
+      \{'path':'~/vimwiki/thesis','syntax':'markdown','ext':'.md'}
+      \]
+let g:vimwiki_ext2syntax = {'.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
+
+
+"=== FN Mappings ===
+
+"Map F4 to toggle search highlighting
+let hlstate=0
+map <silent> <F4> :if (hlstate == 0) \| nohlsearch \| else \| set hlsearch \| endif \| let hlstate=1-hlstate<CR>
+  
+"Map F5 to toggle spellcheck
+map <silent> <F5> :setlocal spell! spelllang=en_us<CR>
+
+
+"Map F7 to smart indent
+map <F7> gg=G<C-o><C-o>
+
+"Map F9 to execute
+nnoremap <F9> :!clear && %:p<Enter>
+
+"Map F5 to toggle spellcheck
+let goyostate=0
+map <silent> <Leader>z :if(goyostate==0) \| Goyo 80% \| else \| Goyo \| endif \| let goyostate=1-goyostate<CR>
+"Map s to save
+noremap <silent> <Leader>s :update<CR>
+

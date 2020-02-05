@@ -1,0 +1,114 @@
+#!/usr/bin/env zsh
+ask() {
+    # https://gist.github.com/davejamesmiller/1965569
+    local prompt default reply
+
+    if [ "${2:-}" = "Y" ]; then
+        prompt="Y/n"
+        default=Y
+    elif [ "${2:-}" = "N" ]; then
+        prompt="y/N"
+        default=N
+    else
+        prompt="y/n"
+        default=
+    fi
+
+    while true; do
+
+        # Ask the question (not using "read -p" as it uses stderr not stdout)
+        echo -n "$1 [$prompt] "
+
+        # Read the answer (use /dev/tty in case stdin is redirected from somewhere else)
+        read reply </dev/tty
+
+        # Default?
+        if [ -z "$reply" ]; then
+            reply=$default
+        fi
+
+        # Check if the reply is valid
+        case "$reply" in
+            Y*|y*) return 0 ;;
+            N*|n*) return 1 ;;
+        esac
+
+    done
+}
+dirsize() {
+  du -hs $* | sort -h
+}
+cedit(){
+  if [ -z "$1" ]; then
+    echo "No argument supplied"
+  else
+    echo $1
+    filepath=${$(realpath $1)/./dot_}
+    echo $filepath
+    realname=${filepath/$HOME\//}
+    echo $realname
+    if [[ $(chezmoi source-path "$1") = *"not in source state"* ]] || [[ $(chezmoi source-path "$1") = *"does not exist"* ]] || [[ $(chezmoi source-path "$1") = *"outside target directory"* ]]; then 
+      echo "file not in a source state"
+      $EDITOR $1
+    else
+      echo "editing managed file"
+      chezmoi edit $(realpath $1);
+    fi
+  fi
+}
+hsearch() {
+  if [ -z "$1" ]; then
+    echo "No argument supplied"
+  elif [ ! -d $LOGPATH ]; then
+    echo "$LOGPATH does not exist. Check that this path is correct."
+  else
+    awk '{$2 = ""; $3 = ""; print $0;}' $LOGPATH/* | ack $1 --color | less -r
+  fi
+}
+search() {
+  if [ -z "$1" ]; then
+    echo "No argument supplied"
+  elif [ ! -f $1 ]; then
+    echo "file not found"
+  else
+    ack -n $2 $1
+  fi
+}
+cl() {
+  if [ -d $1 ] ; then
+    cd $1
+    ls
+  else
+    echo "'$1' not a dir..."
+  fi
+}
+# extract () {
+# 
+#   filename=$(basename -- $1)
+#   filename="${filename%.*}"
+# 
+#   if [ -f $1 ] ; then
+#     case $1 in
+#       *.tar.bz2)   tar xvjf $1    ;;
+#       *.tar.gz)    tar xvzf $1    ;;
+#       *.bz2)       bunzip2 $1     ;;
+#       *.rar)       rar x $1       ;;
+#       *.gz)        gunzip $1      ;;
+#       *.tar)       tar xvf $1     ;;
+#       *.tbz2)      tar xvjf $1    ;;
+#       *.tgz)       tar xvzf $1    ;;
+#       *.zip)       unzip $1       ;;
+#       *.Z)         uncompress $1  ;;
+#       *.7z)        7z x $1        ;;
+#       *)           echo "don't know how to extract '$1'..." ;;
+#     esac
+#   else
+#     echo "'$1' is not a valid file!"
+#   fi
+# }
+echoerr() { 
+  echo "$@" 1>&2;
+}
+gi() { 
+  curl -sLw n https://www.gitignore.io/api/$@ ;
+}

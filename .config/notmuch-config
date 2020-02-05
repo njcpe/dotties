@@ -1,0 +1,14 @@
+[database]
+path=/home/noah/.local/share/mail
+[user]
+name=noah grad email
+primary_email=noah_johnson@uri.edu
+[new]
+tags=unread;inbox;
+ignore=
+[search]
+exclude_tags=deleted;spam;
+[maildir]
+synchronize_flags=true
+[crypto]
+gpg_path=gpg

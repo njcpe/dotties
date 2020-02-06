@@ -78,9 +78,12 @@ fetchFiles
 if [[ $? -eq 128 ]]; then
   echo "You already have my dotfiles! "
 else
+
+  local config
+
   whichShell
   echo ".dotfiles" >> .gitignore
-  alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+  local config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
   mkdir -p .config-backup
   config checkout
   if [ $? = 0 ]; then

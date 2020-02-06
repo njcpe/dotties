@@ -25,6 +25,7 @@
 
     idle_threshold = 120
     font = Fira Code Nerd Font 10
+    #font = ProggyCleanTTCE Nerd Font Mono 14
     line_height = 0
     markup = full
 

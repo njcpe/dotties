@@ -38,14 +38,9 @@ ask() {
 }
 
 function whichShell {
-  local shell
-  local cmd
-
-  shell=$(echo $0)
   cmd="alias config=\"/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME\""
-  echo $shell
   echo -n "looks like you're using "
-  case "$shell" in
+  case "$SHELL" in
 
     bash)
       echo "bash"
@@ -58,7 +53,8 @@ function whichShell {
       ;;
 
     *)
-      echo "a shell my dotfiles aren't tested on."
+      echo -n "$SHELL"
+      echo ", a shell my dotfiles aren't tested on."
       if ask "Do you want to continue?" N; then
 
         echo -e "Copy this alias into your rc file\n"

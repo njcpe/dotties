@@ -1,20 +1,20 @@
 #!/usr/bin/env zsh
 ask() {
-    # https://gist.github.com/davejamesmiller/1965569
-    local prompt default reply
+  # https://gist.github.com/davejamesmiller/1965569
+  local prompt default reply
 
-    if [ "${2:-}" = "Y" ]; then
-        prompt="Y/n"
-        default=Y
-    elif [ "${2:-}" = "N" ]; then
-        prompt="y/N"
-        default=N
-    else
-        prompt="y/n"
-        default=
-    fi
+  if [ "${2:-}" = "Y" ]; then
+    prompt="Y/n"
+    default=Y
+  elif [ "${2:-}" = "N" ]; then
+    prompt="y/N"
+    default=N
+  else
+    prompt="y/n"
+    default=
+  fi
 
-    while true; do
+  while true; do
 
         # Ask the question (not using "read -p" as it uses stderr not stdout)
         echo -n "$1 [$prompt] "
@@ -24,20 +24,20 @@ ask() {
 
         # Default?
         if [ -z "$reply" ]; then
-            reply=$default
+          reply=$default
         fi
 
         # Check if the reply is valid
         case "$reply" in
-            Y*|y*) return 0 ;;
-            N*|n*) return 1 ;;
+          Y*|y*) return 0 ;;
+          N*|n*) return 1 ;;
         esac
 
-    done
-}
-dirsize() {
-  du -hs $* | sort -h
-}
+      done
+    }
+  dirsize() {
+    du -hs $* | sort -h
+  }
 cedit(){
   if [ -z "$1" ]; then
     echo "No argument supplied"
@@ -112,3 +112,35 @@ echoerr() {
 gi() { 
   curl -sLw n https://www.gitignore.io/api/$@ ;
 }
+haveProg() {
+  if [ -z "$1" ]; then
+    echo "args not supplied"
+    exit 2
+  fi
+  [ -x "$(which $1)" ]
+}
+getPkgMan(){
+  if haveProg apt ; then
+    export PKG_MANAGER='apt'
+  elif haveProg yum ; then 
+    export PKG_MANAGER='yum'
+  elif haveProg yay ; then
+    export PKG_MANAGER='yay'
+  elif haveProg pacman ; then 
+    export PKG_MANAGER='pacman'
+  else
+    echo 'No package manager found!'
+    exit 1
+  fi
+}
+pkgInstall(){
+  if [[ -z "$PKG_MANAGER" ]]; then
+    echo "no package manager found"
+    exit 1
+  elif [ "$PKG_MANAGER" = 'yay' ]; then
+    eval "${PKG_MANAGER} -S" $1
+  else
+    eval "sudo ${PKG_MANAGER} -S" $1
+  fi
+}
+

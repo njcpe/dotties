@@ -30,7 +30,7 @@ command -v nvim >/dev/null && alias vim="nvim" vimdiff="nvim -d" # Use neovim fo
 
 vf() { fzf | xargs -r -I % $EDITOR % ;}
 
-alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias cfg='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 alias vim='nvim'
 alias v='nvim'
@@ -113,7 +113,7 @@ alias ga='git add'
 alias gp='git push'
 alias addr='ifconfig | grep "inet addr" -m 1'
 alias chr='nohup google-chrome'
-alias gA='git add -A'
+alias gA='git add -u' #we dont want to accidently add new files
 alias jnbs="jupyter notebook --no-browser --port=8889"
 alias killgazebogym='killall -9 rosout roslaunch rosmaster gzserver nodelet robot_state_publisher gzclient'
 #alias bc='bc -l'
@@ -122,6 +122,7 @@ alias cmd='chezmoi diff | colordiff'
 alias cma='chezmoi apply -v'
 alias e=cedit
 alias z='zathura'
+alias lofi='youtube-viewer https:\/\/www.youtube.com\/watch?v=hHW1oY26kxQ -n' #stream chilled cow lofi hip-hop
 
 startNeurosurgeon(){
   cd ~/repos/neurosurgeon/object_detection

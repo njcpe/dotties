@@ -38,9 +38,13 @@ ask() {
 }
 
 function whichShell {
+  local shl
+  local cmd
+
+  shl="$(basename $SHELL)"
   cmd="alias config=\"/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME\""
   echo -n "looks like you're using "
-  case "$SHELL" in
+  case shl in
 
     bash)
       echo "bash"
@@ -53,7 +57,7 @@ function whichShell {
       ;;
 
     *)
-      echo -n "$SHELL"
+      echo -n "shl"
       echo ", a shell my dotfiles aren't tested on."
       if ask "Do you want to continue?" N; then
 

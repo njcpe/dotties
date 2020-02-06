@@ -46,7 +46,7 @@ function whichShell {
   local cmd
 
   shl="$(basename $SHELL)"
-  cmd="alias cfg=\"/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME\""
+  cmd="alias config=\"/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME\""
   echo -n "looks like you're using "
   case $shl in
 
@@ -80,15 +80,15 @@ if [[ $? -eq 128 ]]; then
 else
   whichShell
   echo ".dotfiles" >> .gitignore
-  alias cfg='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+  alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
   mkdir -p .config-backup
-  cfg checkout
+  config checkout
   if [ $? = 0 ]; then
     echo "checked out config"
   else
     echo "backing up previous config"
-    cfg checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-backup/{}
+    config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-backup/{}
   fi;
-  cfg checkout
-  cfg config --local status.showUntrackedFiles no
+  config checkout
+  config config --local status.showUntrackedFiles no
 fi

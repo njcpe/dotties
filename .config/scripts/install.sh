@@ -44,7 +44,7 @@ function whichShell {
   shl="$(basename $SHELL)"
   cmd="alias config=\"/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME\""
   echo -n "looks like you're using "
-  case shl in
+  case $shl in
 
     bash)
       echo "bash"
@@ -57,7 +57,7 @@ function whichShell {
       ;;
 
     *)
-      echo -n "shl"
+      echo -n "$shl"
       echo ", a shell my dotfiles aren't tested on."
       if ask "Do you want to continue?" N; then
 

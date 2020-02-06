@@ -78,20 +78,16 @@ fetchFiles
 if [[ $? -eq 128 ]]; then
   echo "You already have my dotfiles! "
 else
-
-  local config
-
   whichShell
   echo ".dotfiles" >> .gitignore
-  local config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
   mkdir -p .config-backup
-  config checkout
+  /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME checkout
   if [ $? = 0 ]; then
     echo "checked out config"
   else
     echo "backing up previous config"
-    config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-backup/{}
+    /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-backup/{}
   fi;
-  config checkout
-  config config --local status.showUntrackedFiles no
+  /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME checkout
+  /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME config --local status.showUntrackedFiles no
 fi

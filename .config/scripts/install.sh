@@ -1,5 +1,9 @@
 echo "installing my dotfiles"
 
+fetchFiles() {
+  git clone --bare https://github.com/njohnsoncpe/dotties.git $HOME/.dotfiles > /dev/null 2>&1 
+}
+
 ask() {
   # https://djm.me/ask
   local prompt default reply
@@ -42,7 +46,7 @@ function whichShell {
   local cmd
 
   shl="$(basename $SHELL)"
-  cmd="alias config=\"/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME\""
+  cmd="alias cfg=\"/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME\""
   echo -n "looks like you're using "
   case $shl in
 
@@ -70,18 +74,21 @@ function whichShell {
   esac
 }
 
-whichShell
-echo ".dotfiles" >> .gitignore
-git clone --bare https://github.com/njohnsoncpe/dotties.git $HOME/.dotfiles 
-alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-mkdir -p .config-backup
-config checkout
-if [ $? = 0 ]; then
-  echo "checked out config"
+fetchFiles
+if [[ $? -eq 128 ]]; then
+  echo "You already have my dotfiles! "
 else
-  echo "backing up previous config"
-  config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-backup/{}
-fi;
-config checkout
-config config --local status.showUntrackedFiles no
-
+  whichShell
+  echo ".dotfiles" >> .gitignore
+  alias cfg='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+  mkdir -p .config-backup
+  cfg checkout
+  if [ $? = 0 ]; then
+    echo "checked out config"
+  else
+    echo "backing up previous config"
+    cfg checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-backup/{}
+  fi;
+  cfg checkout
+  cfg config --local status.showUntrackedFiles no
+fi

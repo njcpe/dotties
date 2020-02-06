@@ -17,8 +17,15 @@ set clipboard=unnamedplus
 inoremap jj <Esc>
 
 " === Folding ===
-set foldmethod=syntax
+set foldenable
+set foldmethod=marker
 set foldlevelstart=1
+
+au FileType sh let g:sh_fold_enabled=5
+au FileType sh let g:is_bash=1
+au FileType sh set foldmethod=syntax
+
+syntax enable
 
 " Space will toggle folds!
 nnoremap <space> za

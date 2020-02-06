@@ -1,8 +1,14 @@
-{  
-"languageserver": {
+{
+  "languageserver": {
+    "efm": {
+      "command": "efm-langserver",
+      "args": [],
+      "filetypes": ["vim","markdown"]
+    },
     "digestif": {
       "command": "digestif",
-      "filetypes": ["tex", "plaintex", "context"]
+      "filetypes": ["tex","plaintex","context"]
     }
   }
 }
+

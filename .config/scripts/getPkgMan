@@ -17,5 +17,4 @@ elif haveProg pacman ; then
   alias pkgInstall="sudo ${PKG_MANAGER} -S"
 else
     echo 'No package manager found!'
-    exit 2
 fi

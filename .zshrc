@@ -130,18 +130,18 @@ export PATH
 
 export PATH="/usr/local/MATLAB/R2019b/bin:$PATH"
 
-getPkgMan
+#getPkgMan #TODO: get this script working
 
 #go-lang
-if [[ $(which go) = *"not found"* ]]; then
-  if ask "Go not installed, install now?" N; then
-    pkgInstall go
-  fi
-else
-  export GOPATH=$HOME/gocode
-  export PATH=$PATH:$(go env GOPATH)/bin
-  export GOPATH=$(go env GOPATH)
-fi
+#if [[ $(which go) = *"not found"* ]]; then
+#  if ask "Go not installed, install now?" N; then
+#    pkgInstall go
+#  fi
+#else
+#  export GOPATH=$HOME/gocode
+#  export PATH=$PATH:$(go env GOPATH)/bin
+#  export GOPATH=$(go env GOPATH)
+#fi
 
 [[ -d "/usr/lib/jvm/" ]] && export JAVA_HOME="/usr/lib/jvm/java-8-oracle/"
 

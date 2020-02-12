@@ -154,8 +154,6 @@ export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/e
 export CUDA_HOME="/usr/local/cuda/"
 export PATH="$PATH:/usr/local/cuda/bin"
 
-# Used for comprehensive logging
-export PROMPT_COMMAND='if [ "$(id -u)" -ne 0 ]; then echo "$(date "+%Y-%m-%d.%H:%M:%S") $(pwd) $(history 1)" >> $HOME/.logs/zsh-history-$(date "+%Y-%m-%d").log; fi'
 setopt auto_cd
 
 # Update LINES and COLUMNS after each command if necessary
@@ -184,7 +182,6 @@ fi
 export LOGPATH=$HOME/.logs
 
 export ANACONDA_PATH="$HOME/anaconda3/"
-
 
 if [ -d $ANACONDA_PATH ]; then
   # >> conda initialize>>
@@ -221,5 +218,14 @@ fi
 [[ -f $HOME/.config/zhstrconf ]] && source $HOME/.config/zhstrconf
 [[ -f $HOME/.config/p10k.zsh ]] && source $HOME/.config/p10k.zsh
 POWERLEVEL9K_COLOR_SCHEME='light'
+
+# Used for comprehensive logging
+log(){
+  if [ "$(id -u)" -ne 0 ]; then 
+    echo "$(date "+%Y-%m-%d.%H:%M:%S") $(pwd) $(history -1)" >> $HOME/.logs/zsh-history-$(date "+%Y-%m-%d").log; 
+  fi
+}
+
+precmd() { log }
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"

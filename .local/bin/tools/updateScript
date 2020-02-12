@@ -1,0 +1,10 @@
+#! /usr/bin/env bash
+
+#dont auto update YAY (to prevent arbitrary code exec as root)
+#yay -Syu yay
+
+#then update pacman
+pacman -Syu pacman --noconfirm
+
+#then update everything else
+pacman -Syu --noconfirm

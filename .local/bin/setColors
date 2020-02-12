@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+
+if [[ -z $1 ]]; then
+  echo "no args provided"
+elif [[ $1 = "day" ]]; then
+  echo "setting day theme"
+  wal --theme base16-one -l #--saturate 0.7 #--backend colorz
+  xrdb -merge $HOME/.cache/wal/colors.Xresources
+  dunstWal
+  export LIGHT_MODE=1
+
+elif [[ $1 = "night" ]]; then
+  echo "setting night theme"
+  wal --theme base16-onedark # --saturate 0.7 #--backend colorz
+  xrdb -merge $HOME/.cache/wal/colors.Xresources
+  dunstWal
+  export LIGHT_MODE=0
+fi
+

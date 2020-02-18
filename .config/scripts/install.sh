@@ -39,7 +39,7 @@ ask() {
     esac
 
   done
-}
+} 
 
 function whichShell {
   local shl
@@ -79,15 +79,23 @@ if [[ $? -eq 128 ]]; then
   echo "You already have my dotfiles! "
 else
   whichShell
-  echo ".dotfiles" >> .gitignore
+  echo ".dotfiles.git" >> .gitignore
   mkdir -p .config-backup
   /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME checkout
   if [ $? = 0 ]; then
     echo "checked out config"
   else
     echo "backing up previous config"
-    /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-backup/{}
+    files="$(/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME checkout 2>&1 | egrep "\s+\." | awk {'print $1'})"
+
+    echo $files | sed 's/\//\t/g' | awk '{$NF=""; print $0}' | sed 's/ /\//g' | xargs -I{} mkdir -p .config-backup/{}
+   echo $files | xargs -I{} mv {} .config-backup/{}
+   
   fi;
   /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME checkout
+  if [ $? = 0 ]; then
+    echo "backup successful"
+  fi
   /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME config --local status.showUntrackedFiles no
 fi
+
